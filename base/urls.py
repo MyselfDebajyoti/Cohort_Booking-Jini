@@ -1,9 +1,16 @@
 from django.urls import path
-from . import views
+from .views1 import generate_post_api, finalize_post_api, get_final_post_api, schedule_post_api
+from base import views1
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('generate-post/', views.generate_post, name='generate_post'),  # Changed from API to regular view
-    path('finalize-post/', views.finalize_post, name='finalize_post'),  # Changed from API to regular view
-    path('schedule-post/', views.schedule_post, name='schedule_post'),  # Changed from API to regular view
+    path("", views1.home, name="home"),
+    path('api/generate-post/', generate_post_api, name='generate-post'),
+    path('api/finalize-post/', finalize_post_api, name='finalize-post'),
+    path('api/final-post/', get_final_post_api, name='final-post'),
+    path('api/schedule-post/', schedule_post_api, name='schedule-post'),
 ]
+
+
+
+
+
