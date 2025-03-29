@@ -8,9 +8,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 
-def home(request):
-    """Renders the home page where users can input product details."""
-    return render(request, "base/index.html")
+# def home(request):
+#     """Renders the home page where users can input product details."""
+#     return render(request, "base/index.html")
 
 
 @csrf_exempt
