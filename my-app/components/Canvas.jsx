@@ -666,6 +666,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function InstagramPostCreator({
   productName,
@@ -684,6 +685,7 @@ export default function InstagramPostCreator({
   const [text, setText] = useState("");
   const [fontSize, setFontSize] = useState(16);
   const [isBold, setIsBold] = useState(false);
+  const router = useRouter();
 
   const canvasRef = useRef(null);
   const [elements, setElements] = useState([]);
@@ -698,6 +700,10 @@ export default function InstagramPostCreator({
   const [editedCaption, setEditedCaption] = useState(caption);
   const [editedHashtags, setEditedHashtags] = useState(hashtags);
 
+  const [formData, setFormData] = useState({
+    imagePrompt: "",
+  });
+
   // Control states
   const [bgColor, setBgColor] = useState("#ffffff");
   const [customText, setCustomText] = useState("");
@@ -705,6 +711,7 @@ export default function InstagramPostCreator({
   const [textSize, setTextSize] = useState(20);
   const [currentFilter, setCurrentFilter] = useState("none");
   const [isCanvasReady, setIsCanvasReady] = useState(false);
+  const [finalImageData, setFinalImageData] = useState(null);
 
   // Save current state to history
   //   const saveState = () => {
@@ -1344,6 +1351,126 @@ export default function InstagramPostCreator({
     }
   };
 
+  //   const regenerateImage = async () => {
+  //     const prompt = formData.imagePrompt || "luxury hotel";
+
+  //     try {
+  //       const response = await fetch(
+  //         `http://127.0.0.1:8000/api/generate-image?prompt=${encodeURIComponent(
+  //           prompt
+  //         )}`
+  //       );
+  //       const data = await response.json();
+
+  //       const img = new Image();
+  //       img.crossOrigin = "Anonymous";
+  //       img.src = data.image_url + `?t=${new Date().getTime()}`;
+
+  //       img.onload = () => {
+  //         const newElements = [
+  //           {
+  //             type: "image",
+  //             img: img,
+  //             x: 0,
+  //             y: 0,
+  //             width: canvasRef.current.width,
+  //             height: canvasRef.current.height,
+  //           },
+  //         ];
+
+  //         setElements(newElements);
+  //         saveState(newElements);
+  //         drawCanvas(canvasRef.current.getContext("2d"), newElements);
+  //       };
+
+  //       //   img.onerror = () => {
+  //       //     showToast("Failed to regenerate the image. Please try again.");
+  //       //   };
+  //     } catch (error) {
+  //       console.error("Error generating image:", error);
+  //     }
+  //   };
+
+  // Regenerate image function
+  const regenerateImage = async () => {
+    const prompt = formData.imagePrompt || productName;
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/generate-image?prompt=${encodeURIComponent(
+          prompt
+        )}`
+      );
+      const data = await response.json();
+
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      img.src = data.image_url + `?t=${new Date().getTime()}`;
+
+      img.onload = () => {
+        const canvasWidth = 500;
+        const canvasHeight = 500;
+        const ratio = Math.min(
+          canvasWidth / img.naturalWidth,
+          canvasHeight / img.naturalHeight
+        );
+
+        const newElements = [
+          {
+            type: "image",
+            img: img,
+            x: 0,
+            y: 0,
+            width: img.naturalWidth * ratio,
+            height: img.naturalHeight * ratio,
+          },
+        ];
+
+        // Keep any existing text elements
+        const existingTextElements = elements.filter(
+          (el) => el.type === "text"
+        );
+        setElements([...newElements, ...existingTextElements]);
+        saveState([...newElements, ...existingTextElements]);
+      };
+
+      img.onerror = () => {
+        console.error("Failed to load regenerated image");
+      };
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Update selected text element if it exists
+    if (selectedElement && selectedElement.type === "text") {
+      if (name === "textColor") {
+        setSelectedElement({ ...selectedElement, color: value });
+      } else if (name === "textSize") {
+        setSelectedElement({
+          ...selectedElement,
+          size: parseInt(value),
+          font: `bold ${value}px Arial`,
+        });
+      }
+
+      // Redraw canvas with updated text
+      setElements((prev) => {
+        const newElements = [...prev];
+        const index = newElements.findIndex((el) => el === selectedElement);
+        if (index !== -1) {
+          newElements[index] = selectedElement;
+          drawCanvas(canvasRef.current.getContext("2d"), newElements);
+        }
+        return newElements;
+      });
+    }
+  };
+
   // Modified image loading with proper CORS handling
   useEffect(() => {
     if (!imageUrl) return;
@@ -1786,7 +1913,6 @@ export default function InstagramPostCreator({
                 className="w-full p-2  border-[#A6A6A6] bg-gradient-to-r from-[#E6E9FA]  to-[#ECE6FF]  rounded border text-sm h-32 resize-none text-black"
               />
             </div>
-
             <button
               className="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-medium"
               type="submit"
@@ -1794,6 +1920,27 @@ export default function InstagramPostCreator({
               Generate ✨
             </button>
           </form>
+          <div className="mb-4">
+            <h3 className="font-medium mb-2 text-black font-satoshi text-lg">
+              Post Description
+            </h3>
+            <input
+              name="imagePrompt"
+              value={caption}
+              placeholder="Describe the image you want"
+              // onChange={(e) => setEditedCaption(e.target.value)}
+              onChange={handleInputChange}
+              className="w-full p-2  border-[#A6A6A6] bg-gradient-to-r from-[#E6E9FA]  to-[#ECE6FF]  rounded border text-sm  resize-none text-black"
+            />
+          </div>
+
+          <button
+            onClick={regenerateImage}
+            className="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-medium"
+            type="submit"
+          >
+            Generate ✨
+          </button>
         </div>
 
         {/* Main Content */}

@@ -63,6 +63,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import FinalPost from "../../components/Finalization";
+import Final from "../testing/page";
 
 export default function AnotherRoute() {
   // Initialize state to hold the data
