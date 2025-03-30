@@ -1,6 +1,5 @@
 from django.shortcuts import render
 import requests
-import requests
 import openai
 import os
 from dotenv import load_dotenv

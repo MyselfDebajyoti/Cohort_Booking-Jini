@@ -1,7 +1,5 @@
 from django.urls import path
 from .views import generate_image, generate_post_api, finalize_post_api, get_final_post_api, schedule_post_api
-from base import views1
-
 urlpatterns = [
     path('api/generate-post/', generate_post_api, name='generate-post'),
     path('api/finalize-post/', finalize_post_api, name='finalize-post'),

@@ -19,7 +19,6 @@ def generate_image(request):
     image_url = get_pexels_image(prompt)
     return Response({"image_url": image_url})
 
-
 @csrf_exempt
 @require_POST
 def generate_post_api(request):
