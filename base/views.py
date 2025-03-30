@@ -7,10 +7,17 @@ from .models import ScheduledPost
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-def home(request):
-    """Renders the home page where users can input product details."""
-    return render(request, "base/index.html")
+@api_view(["GET"])
+def generate_image(request):
+    """
+    API Endpoint: Fetch an image based on a user-provided prompt.
+    """
+    prompt = request.GET.get("prompt", "luxury hotel")
+    image_url = get_pexels_image(prompt)
+    return Response({"image_url": image_url})
 
 
 @csrf_exempt
