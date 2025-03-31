@@ -2,17 +2,24 @@
 
 ## Introduction
 
+This project consists of a **Next.js** frontend and a **Django** backend. The frontend interacts with the backend through REST APIs.
+
 This README provides a step-by-step guide on how to install and set up a Django application. It also includes instructions on how to create and use a virtual environment, and how to install all necessary dependencies.
 
 ## Prerequisites
 
 Before starting, ensure you have the following installed:
 
-- Python (version 3.x)
-- pip (Python package installer)
-- virtualenv
+- **Node.js** (Latest LTS recommended)
+- **Python 3.8+**
+- **pip** (Python package manager)
+- **virtualenv** (Recommended for Python environment isolation)
+- **PostgreSQL or SQLite** (For database)
 
-## Installation Steps
+## Installation Steps:-
+
+
+### 1️⃣ Setting Up the Django Backend
 
 ### Step 1: Clone the Repository
 
@@ -95,6 +102,26 @@ deactivate
 
 - Ensure you have the latest version of `pip` by running `pip install --upgrade pip`.
 - If you encounter any issues during the installation process, check the error messages for guidance and ensure all prerequisites are met.
+
+### 2️⃣ Setting Up the Next.js Frontend
+
+## Step 1: Navigate to the frontend directory:
+
+```bash
+cd ../my-app
+```
+
+## Step 2: Install dependencies:
+
+```bash
+npm install
+```
+
+## Step 3: Run the frontend:
+
+```bash
+npm run dev
+```
 
 # Social Media Post Generator - API Guide
 
