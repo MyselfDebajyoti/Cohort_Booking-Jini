@@ -1897,7 +1897,7 @@ export default function InstagramPostCreator({
               </h3>
               <input
                 type="text"
-                value={hashtags}
+                value={editedHashtags}
                 onChange={(e) => setEditedHashtags(e.target.value)}
                 className="w-full p-2 border-[#A6A6A6] bg-gradient-to-r from-[#E6E9FA]  to-[#ECE6FF]  rounded border  text-sm text-black"
               />
@@ -1908,7 +1908,7 @@ export default function InstagramPostCreator({
                 Post Description
               </h3>
               <textarea
-                value={caption}
+                value={editedCaption}
                 onChange={(e) => setEditedCaption(e.target.value)}
                 className="w-full p-2  border-[#A6A6A6] bg-gradient-to-r from-[#E6E9FA]  to-[#ECE6FF]  rounded border text-sm h-32 resize-none text-black"
               />
@@ -1922,11 +1922,11 @@ export default function InstagramPostCreator({
           </form>
           <div className="mb-4">
             <h3 className="font-medium mb-2 text-black font-satoshi text-lg">
-              Post Description
+              Generate New:
             </h3>
             <input
               name="imagePrompt"
-              value={caption}
+              value={formData.imagePrompt}
               placeholder="Describe the image you want"
               // onChange={(e) => setEditedCaption(e.target.value)}
               onChange={handleInputChange}
@@ -1936,10 +1936,10 @@ export default function InstagramPostCreator({
 
           <button
             onClick={regenerateImage}
-            className="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-medium"
+            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-medium"
             type="submit"
           >
-            Generate ✨
+            Re-generate ✨
           </button>
         </div>
 

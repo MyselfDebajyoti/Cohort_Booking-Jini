@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const InstagramPostGenerator = () => {
+
+const  InstagramPostGenerator = () => {
   const [postTitle, setPostTitle] = useState(
     "Celebrate the Colors of Holi at Yoyo 🎨"
   );
@@ -18,6 +19,8 @@ const InstagramPostGenerator = () => {
   );
   const [targetAudience, setTargetAudience] = useState("Foreigners");
   const [isGenerating, setIsGenerating] = useState(false);
+
+  
 
   const handleGenerate = () => {
     setIsGenerating(true);
@@ -558,16 +561,7 @@ const InstagramPostGenerator = () => {
                 </p>
 
                 {/* Hashtags */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {postData.hashtags.map((hashtag, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-[#001ECC] font-semibold px-2.5 py-0.5 rounded"
-                    >
-                      {hashtag}
-                    </span>
-                  ))}
-                </div>
+                
               </div>
 
               {/* Edit Post Button */}

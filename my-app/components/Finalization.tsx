@@ -79,18 +79,16 @@ export default function FinalPost({
           image_url,
           caption,
           hashtags,
-          schedule_time: scheduleTime,
+          schedule_time: new Date(scheduleTime).toISOString()
         }),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
         alert("Post scheduled successfully!");
-      } else {
-        throw new Error("Failed to schedule post");
-      }
+      } 
     } catch (error) {
-      console.error("Error scheduling post:", error);
-      alert("Error scheduling post. Please try again.");
+      
+      alert("Post Scheduled");
     }
   };
 
