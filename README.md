@@ -1,4 +1,4 @@
-# Django App README
+# Snap Jinni README
 
 ## Introduction
 
